@@ -1,28 +1,43 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 
+const HOST = "http://localhost:8000";
+
 function App() {
   const [text, setText] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    let form: useRef = formRef.current;
-    form = document.querySelector("form");
+    const form = formRef.current;
+    if (!form) return;
     
-    form.addEventListener("submit", (e: Event) => {
+    form.addEventListener("submit", async (e: Event) => {
       e.preventDefault();
       const command_box: HTMLInputElement = document.querySelector("#command_box")!;
       const command: string = command_box.value;
-      socket.sendCommand(command).then((response) => {
-        setText(response);
+
+      let response: Response;
+      try{
+      response = await fetch("/api/command", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ command }),
       });
+    } catch (error){
+      console.error("Failed to send command:", error);
+      return false;
+    }
+
+        setText(response);
       command_box.innerHTML = '';
     });
-  }, [socket])  
+  }, []);  
 
   const scan = async () => {
     try{
-      const response = await fetch("mock-cybot-sensor-scan.txt");
+      const response = await fetch(`${HOST}/api/scan`);
       if (!response.ok) {
         throw new Error("Failed to scan");
       }
