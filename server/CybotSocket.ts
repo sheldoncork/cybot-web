@@ -7,22 +7,21 @@ class CybotSocket {
   // Make TCP connection
   async connect() {
     try {
+      console.log("Attempting connection...");
       this.connection = await Deno.connect({
         port: PORT,
         hostname: HOST,
       });
-      return this.connection;
+      console.log("Successful connection.")
+      return true;
     } catch (error) {
       console.error("Failed to connect:", error);
-      return this.connection;
+      return false;
     }
   }
 
-  status() {
-    if (!this.connection) {
-      return this.connect;
-    }
-    return this.connection;
+  status(): boolean {
+    return this.connection !== null;
   }
 
   async sendCommand(command: string): Promise<string> {

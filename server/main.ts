@@ -8,7 +8,7 @@ const router = new Router();
 const cybotSocket = new CybotSocket();
 
 // Connect socket to Cybot
-// await cybotSocket.connect();
+await cybotSocket.connect();
 
 router.post("/api/command", async (ctx) => {
   try {
@@ -39,15 +39,18 @@ router.get("/api/scan", async (ctx) => {
   }
 });
 
-router.get("/api/connect", (ctx) => {
+router.get("/api/connected", async (ctx) => {
   try {
-    const status = cybotSocket.status();
-    ctx.response.body = `${status}\n` + status ? "Connected" : "Not connected";
+    let isConnected = cybotSocket.status();
+    if (!isConnected) {
+      isConnected = await cybotSocket.connect();
+    }
+    ctx.response.body = isConnected.toString();
+    console.log("Connected?:", isConnected);
   } catch (error) {
+    console.error("Connection error:", error);
     ctx.response.status = 500;
-    ctx.response.body = {
-      error: error instanceof Error ? error.message : "Unknown error occurred",
-    };
+    ctx.response.body = "false";
   }
 });
 

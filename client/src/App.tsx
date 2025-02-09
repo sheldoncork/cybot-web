@@ -5,7 +5,7 @@ import Scanner from "./components/Scanner.tsx";
 const HOST = "http://localhost:8000";
 
 function App() {
-  const [status, setStatus] = useState<string>("");
+  const [connected, setConnected] = useState<boolean>(false);
   const [cmd, setCmd] = useState<string>("");
   const reconnectTimeout = useRef<number>();
 
@@ -34,19 +34,28 @@ function App() {
   // Check Connection
     const checkConnection = async () => {
       try {
-        const response = await fetch("/api/connect");
-        setStatus(await response.text());
-        
-        if (!response.ok || status === "Not connected") {
+        const response = await fetch("/api/connected");
+        if (!response.ok) {
           throw new Error("Failed to connect");
         }
 
-        if (reconnectTimeout.current) {
-          clearTimeout(reconnectTimeout.current);
+        const result = await response.text();
+        const isConnected = result === "true";
+
+        setConnected(isConnected);
+        
+        if (isConnected) {
+          if (reconnectTimeout.current) {
+            clearTimeout(reconnectTimeout.current);
+          }
+        } else {
+          throw new Error("Not connected");
         }
+        
         return true;
       } catch (error) {
         console.error("Failed to connect:", error);
+        setConnected(false);
 
         // Retry connection after 5 seconds
         reconnectTimeout.current = setTimeout(() => {
@@ -59,7 +68,7 @@ function App() {
 
   useEffect(() => checkConnection(), []);
   return (
-    status === "Connected" ? (
+    connected ? (
       <>
         <h1>Last Command:</h1>
         <p>{cmd}</p>
@@ -69,7 +78,12 @@ function App() {
         </form>
       <Scanner HOST={HOST}/>    
     </>
-    ) : (<h1>Connecting to Cybot...</h1>)
+    ) : (
+      <>
+    <h1>Attempting connection to Cybot...</h1>
+    <p>Connected?: {connected.toString()}</p>
+    </>
+    )
   );
 }
 
