@@ -8,7 +8,7 @@ const router = new Router();
 const cybotSocket = new CybotSocket();
 
 // Connect socket to Cybot
-await cybotSocket.connect();
+// await cybotSocket.connect();
 
 router.post("/api/command", async (ctx) => {
   try {
@@ -26,7 +26,9 @@ router.post("/api/command", async (ctx) => {
 
 router.get("/api/scan", async (ctx) => {
   try {
-    const response = await Deno.readTextFile("./server/mock-cybot-sensor-scan.txt");
+    const response = await Deno.readTextFile(
+      "./server/mock-cybot-sensor-scan.txt",
+    );
     ctx.response.status = 200;
     ctx.response.body = response;
   } catch (error) {
@@ -37,12 +39,10 @@ router.get("/api/scan", async (ctx) => {
   }
 });
 
-router.post("/api/connect", async (ctx) => {
+router.get("/api/connect", (ctx) => {
   try {
-    const body = await ctx.request.body.json();
-    const command = body.command;
-    const response = await cybotSocket.sendCommand(command);
-    ctx.response.body = { response };
+    const status = cybotSocket.status();
+    ctx.response.body = `${status}\n` + status ? "Connected" : "Not connected";
   } catch (error) {
     ctx.response.status = 500;
     ctx.response.body = {

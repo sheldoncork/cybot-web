@@ -18,6 +18,13 @@ class CybotSocket {
     }
   }
 
+  status() {
+    if (!this.connection) {
+      return this.connect;
+    }
+    return this.connection;
+  }
+
   async sendCommand(command: string): Promise<string> {
     if (!this.connection) {
       throw new Error("Not connected");
