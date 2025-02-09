@@ -11,10 +11,10 @@ class CybotSocket {
         port: PORT,
         hostname: HOST,
       });
-      return true;
+      return this.connection;
     } catch (error) {
       console.error("Failed to connect:", error);
-      return false;
+      return this.connection;
     }
   }
 

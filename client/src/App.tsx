@@ -44,6 +44,7 @@ function App() {
         if (reconnectTimeout.current) {
           clearTimeout(reconnectTimeout.current);
         }
+        return true;
       } catch (error) {
         console.error("Failed to connect:", error);
 
@@ -56,7 +57,7 @@ function App() {
       }
     };
 
-  useEffect(checkConnection, []);
+  useEffect(() => checkConnection(), []);
   return (
     status === "Connected" ? (
       <>
