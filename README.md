@@ -1,54 +1,30 @@
-# React Template with Vite and Deno
-
-This is a GitHub template project to set up a [React](https://react.dev/) app
-with TypeScript running on [Deno](https://deno.com). It uses
-[Vite](https://vite.dev) as the dev server and an [oak](https://jsr.io/@oak/oak)
-http server on the backend to serve the built project.
-
 ## Features
 
-- React with TypeScript on the frontend
-- Vite for the development server
-- Deno for server-side JavaScript/TypeScript
-- Oak framework for building web applications
-- Static file serving
-- Router setup
+- React Frontend to interact with OpenInterface roombas; specifically the Cybot.
 
 ## Getting Started
 
 ### Prerequisites
 
 To run this app, you will need to have [Deno](https://docs.deno.com/runtime/)
-installed.
+installed. Template from vite-react-deno repository. 
 
 ### Installation
 
-1. Create a new repository using this template. From the repository page, click
-   the "Use this template" button in the top right hand of the page:
-
-<img src="https://docs.github.com/assets/cb-76823/images/help/repository/use-this-template-button.png" alt="Use this template button" width="400">
-
-2. Use the Owner dropdown menu to select the account you want to own the
-   repository and set the repository name and visibility.
-
-3. Clone the repository created to your local machine.
+1. Clone the repository created to your local machine.
 
 ```sh
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/sheldoncork/cybot-web.git
+cd cybot-web
 ```
 
-> For a step by step guide to using a GitHub template
-> [follow this walkthrough](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
-
-## Install the dependencies
-
-To install the dependencies for the frontend and backend, run the following
+2. To install the dependencies for the frontend and backend, run the following
 command:
 
 ```sh
 deno install
 ```
+
 
 ## Run the dev server with vite
 
@@ -74,14 +50,6 @@ To start the backend server, run the following command:
 
 ```sh
 deno run serve
-```
-
-## Running Tests
-
-To run the tests, use the following command:
-
-```sh
-deno test -A
 ```
 
 ## Project Structure
@@ -135,10 +103,6 @@ You can deploy the app with [Deno Deploy](https://dash.deno.com/new_project).
 4. Set the "Build Step" to `deno task build`
 5. Set the entry point to `./server/main.ts`
 6. Click 'deploy project'
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
 
 ## License
 
